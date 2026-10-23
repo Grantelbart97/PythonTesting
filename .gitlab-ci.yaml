@@ -1,0 +1,40 @@
+stages:
+  - lint
+  - typechecking
+  - test
+
+variables:
+  UV_CACHE_DIR: $CI_PROJECT_DIR/.uv-cache
+  UV_COMPILE_BYTECODE: "1"
+  UV_LINK_MODE: copy
+
+default:
+  interruptable: true
+  cache:
+    key:
+      files:
+        - uv.lock
+  before_script: 
+    - uv sync --locked
+
+ruff: 
+  stage: lint
+  script: 
+    - uv run ruff check
+
+ruff-format:
+  stage: lint
+  allow_failure: true
+  script: 
+    - uv run ruff format --check
+
+ty: 
+  stage: typechecking
+  script:
+    - uv run ty check
+
+pytest:
+  stage: test
+  script:
+    - uv run pytest
+
