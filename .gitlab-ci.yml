@@ -9,7 +9,8 @@ variables:
   UV_LINK_MODE: copy
 
 default:
-  interruptable: true
+  interruptible: true
+  image: ghcr.io/astral-sh/uv:debian-slim
   cache:
     key:
       files:
