@@ -2,7 +2,7 @@ class Game:
     def __init__(self):
         self._rolls: list[int] = []
 
-    def roll(self, *pins:int) -> None:
+    def roll(self, *pins: int) -> None:
         self._rolls.extend(pins)
 
     def score(self) -> int:
@@ -16,11 +16,9 @@ class Game:
             elif self._rolls[roll_index] + self._rolls[roll_index + 1] == 10:
                 score += 10 + self._rolls[roll_index + 2]
                 roll_index += 2
-                
+
             else:
                 score += self._rolls[roll_index] + self._rolls[roll_index + 1]
                 roll_index += 2
-            
 
         return score
-
