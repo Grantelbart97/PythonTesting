@@ -10,7 +10,6 @@ variables:
 
 default:
   interruptible: true
-  image: ghcr.io/astral-sh/uv:debian-slim
   cache:
     key:
       files:
@@ -24,17 +23,23 @@ default:
 
 ruff: 
   stage: lint
+  tags: 
+    - docker
   script: 
     - uv run ruff check
 
 ruff-format:
   stage: lint
+  tags: 
+    - docker
   allow_failure: true
   script: 
     - uv run ruff format --check
 
 ty: 
   stage: typechecking
+  tags: 
+    - docker
   script:
     - uv run ty check
     - uv run ty check --output-format=gitlab > gl-code-quality-report-ty.json || true
@@ -45,6 +50,8 @@ ty:
 
 pytest:
   stage: test
+  tags: 
+    - docker
   script:
     - uv run pytest --cov --cov-report=term --cov-report=xml:coverage.xml --junitxml=junit.xml
   coverage: '/^TOTAL.*\s+(\d+)%$/'
