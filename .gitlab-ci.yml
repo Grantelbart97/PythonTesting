@@ -15,8 +15,12 @@ default:
     key:
       files:
         - uv.lock
-  before_script: 
+    paths:
+      - $UV_CACHE_DIR
+  before_script:
     - uv sync --locked
+  after_script:
+    - uv cache prune --ci
 
 ruff: 
   stage: lint
@@ -33,7 +37,7 @@ ty:
   stage: typechecking
   script:
     - uv run ty check
-    - uv run ty check --output-dormat=gitlab > gl-code-quality-report-ty.json || true
+    - uv run ty check --output-format=gitlab > gl-code-quality-report-ty.json || true
   artifacts:
     when: always
     reports:
@@ -42,17 +46,15 @@ ty:
 pytest:
   stage: test
   script:
-    - uv run pytest
     - uv run pytest --cov --cov-report=term --cov-report=xml:coverage.xml --junitxml=junit.xml
-  coverage:
-    - '/^TOTAL.*\s+(\d+)%$/'
+  coverage: '/^TOTAL.*\s+(\d+)%$/'
   artifacts:
     when: always
     paths:
       - junit.xml
       - coverage.xml
     reports:
-    junit: junit.xml
-    coverage_report:
-      coverage_format: cobertura
-      path: coverage.xml
+      junit: junit.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
