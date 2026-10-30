@@ -28,8 +28,14 @@ addopts = "-ra --strict-markers"
 [tool.coverage.run]
 source = ["testing_course"]
 
+[tool.ruff]
+extend-exclude = [".uv-cache"]
+
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "PT"]
 
 [tool.ty.environment]
 python-version = "3.13"
+
+[tool.ty.src]
+exclude = [".uv-cache"]
